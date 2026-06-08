@@ -34,6 +34,15 @@ async function startSetuSystemsServer() {
     return handle(request, response);
   });
 
+  app.use((request, response, nextMiddleware) => {
+    if (!request.url.startsWith("/api/media")) {
+      nextMiddleware();
+      return;
+    }
+
+    return handle(request, response);
+  });
+
   app.use(getFinanceApiApp());
   app.use((request, response) => handle(request, response));
 

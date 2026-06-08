@@ -9,7 +9,8 @@ Setu Systems is the unified production codebase for the Setu portal family. It c
 | setu systems | `/` | Main product-family landing and portal selection. |
 | setu finance | `/finance` | Finance operations, contract intake, customer records, invoices, receipts, payables, people, contracts, audit, and AskSetu. |
 | setu referral | `/referral` | Public referral intake, referrer lookup, referral review, reward qualification, and finance approval. |
-| setu discovery | `/discover` | Opportunity inventory, source refresh, client matching, review queue, and outreach logging. |
+| setu discover | `/discover` | Opportunity inventory, source refresh, client matching, review queue, outreach logging, and media administration. |
+| setu media | `/media` | Media writer workspace for article assignments, work logs, submissions, and delivery history. |
 
 Legacy referral routes such as `/refer`, `/refer/:code`, `/r/:code`, and `/referral-gateway/:code` remain supported and canonicalize into the referral portal experience.
 
@@ -19,6 +20,7 @@ Legacy referral routes such as `/refer`, `/refer/:code`, `/r/:code`, and `/refer
 - A unified Node/Express server entrypoint in `server/unified.js`.
 - Finance API routes preserved through the Express app from `server/index.js`.
 - Discover API routes mounted under `/api/discover/*` and internally handled by Next route handlers.
+- Media writer API routes mounted under `/api/media/*` and handled by Next before Finance API routing.
 - PostgreSQL as the shared system of record. Finance and Discover schemas live side-by-side in one database for local and cost-efficient AWS deployment.
 - Local generated files use `server/storage`; production document storage is designed for private S3.
 
@@ -76,10 +78,15 @@ Finance uses:
 - username: `admin`
 - password: `PORTAL_PASSWORD` from `.env`
 
-Discovery uses:
+Discover uses:
 
 - `admin@discover.local` / `discover123`
 - `teammate@discover.local` / `discover123`
+
+Media uses:
+
+- `writer1@media.local` / `media123`
+- `writer2@media.local` / `media123`
 
 Change local credentials before any shared environment is exposed.
 
@@ -90,6 +97,7 @@ Change local credentials before any shared environment is exposed.
 - [Operations runbook](docs/OPERATIONS_RUNBOOK.md)
 - [Portal functional map](docs/PORTAL_FUNCTIONAL_MAP.md)
 - [Data and security model](docs/DATA_AND_SECURITY.md)
+- [Media portal handoff](docs/MEDIA_PORTAL.md)
 - [Documentation and artifact index](docs/ARTIFACT_INDEX.md)
 
 The inherited Finance and Discover product documents remain in `docs/` and `docs/discover/` for traceability, but the files above are the controlling Setu Systems handoff documents.

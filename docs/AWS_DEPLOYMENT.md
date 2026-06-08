@@ -48,7 +48,7 @@ The service listens on `PORT`, defaulting locally to `4173`. In App Runner/ECS, 
 | `FINANCE_INTEGRATION_KEY` | Same key for Discover sync when running in one environment |
 | `WEBHOOK_SECRET` | Long random webhook secret |
 | `SMTP_*` | Production SMTP provider settings |
-| `OPENAI_API_KEY` | Optional for structured discovery extraction |
+| `OPENAI_API_KEY` | Optional for structured Discover extraction |
 | `CONTRACT_STORAGE_BUCKET` | Private S3 bucket name |
 | `AWS_REGION` | Deployment region |
 
@@ -63,7 +63,7 @@ The service listens on `PORT`, defaulting locally to `4173`. In App Runner/ECS, 
    npm run db:discover:setup
    ```
 4. Start the app.
-5. Smoke test `/`, `/finance`, `/referral`, `/discover`, `/api/auth/status`, and `/api/discover/auth/session`.
+5. Smoke test `/`, `/finance`, `/referral`, `/discover`, `/media`, `/api/auth/status`, `/api/discover/auth/session`, and `/api/media/auth/session`.
 
 ## Storage
 
@@ -91,4 +91,6 @@ Local development can use `server/storage`. Production should use private S3 and
 - Enable RDS automated backups.
 - Enable CloudWatch alarms for app 5xx, CPU, memory, DB connections, and storage.
 - Verify Finance provider integration exposes status only, never amount data.
+- Verify Media writer views expose only client display names, article briefs, criteria, timelines, statuses, and writer-owned work logs.
+- Rotate or replace the local seeded Media writer credentials before exposing any shared environment.
 - Verify auth audit logs do not store passwords, API keys, tokens, raw IPs, or raw user agents.

@@ -4,9 +4,11 @@
 
 - Open `/finance` and confirm the finance dashboard loads after login.
 - Open `/referral` and confirm public referral intake is reachable without finance login.
-- Open `/discover` and confirm inventory, clients, matches, source registry, daily refresh, and review queue load.
+- Open `/discover` and confirm inventory, clients, matches, source registry, daily refresh, review queue, and Media tracker load.
+- Open `/media` and confirm a media writer can see only their own assignments and work history.
 - Check recent auth audit events in Finance Audit.
 - Check Discover review queue for open ingestion items.
+- Check submitted Media assignments for admin publication/return decisions.
 - Confirm email mode: sent through SMTP or logged locally as simulated.
 
 ## Deployment Smoke Tests
@@ -16,8 +18,10 @@
 /usr/bin/curl -I http://127.0.0.1:4173/finance
 /usr/bin/curl -I http://127.0.0.1:4173/referral
 /usr/bin/curl -I http://127.0.0.1:4173/discover
+/usr/bin/curl -I http://127.0.0.1:4173/media
 /usr/bin/curl -s http://127.0.0.1:4173/api/auth/status
 /usr/bin/curl -s http://127.0.0.1:4173/api/discover/auth/session
+/usr/bin/curl -s http://127.0.0.1:4173/api/media/auth/session
 ```
 
 Expected result: page routes return HTTP `200`, unauthenticated API checks return a JSON auth/session shape rather than a server error.
@@ -36,7 +40,7 @@ Seed or reseed Finance:
 npm run db:seed
 ```
 
-Set up Discover:
+Set up Discover and Media:
 
 ```bash
 npm run db:discover:setup
@@ -78,7 +82,7 @@ Requirements:
 - `FINANCE_INTEGRATION_KEY`
 - `INTEGRATION_API_KEY` set to the same Finance-side key
 
-Discover stores only the engagement status and timestamp. It does not store Finance payment, invoice, balance, or amount fields.
+Discover stores only the engagement status and timestamp. Media inherits the same boundary and does not store Finance payment, invoice, balance, or amount fields.
 
 ## Incident Response
 
@@ -87,7 +91,10 @@ Discover stores only the engagement status and timestamp. It does not store Fina
 | App does not start | Confirm `.env`, `DATABASE_URL`, and port availability. |
 | Finance login fails | Confirm `PORTAL_USERNAME`, `PORTAL_PASSWORD`, and `AUTH_SESSION_SECRET`. |
 | Discover login fails | Confirm Discover seed/setup ran and `SESSION_SECRET` is set. |
+| Media login fails | Confirm `npm run db:discover:setup` ran and `media_users` are seeded. |
 | Discover APIs return Finance payloads | Confirm requests use `/api/discover/*`, not `/api/*`. |
+| Media APIs return Finance auth errors | Confirm `server/unified.js` routes `/api/media/*` to Next before the Finance Express API. |
+| Writer sees no assignment | Confirm the assignment is still assigned to that writer and was not reassigned. |
 | Ingestion fails | Confirm `PHASE2_RUN_TOKEN`, outbound network, source registry, and optional `OPENAI_API_KEY`. |
 | Email is simulated | Confirm SMTP variables are configured and reachable. |
 | Downloads fail | Confirm local storage path or S3 bucket permissions. |

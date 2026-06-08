@@ -4,7 +4,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "setu systems",
-  description: "Unified Setu Systems portal family for finance, referral, and discovery operations.",
+  description: "Unified Setu Systems portal family for finance, referral, discover, and media operations.",
 };
 
 export default function RootLayout({

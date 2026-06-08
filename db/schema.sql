@@ -238,3 +238,78 @@ CREATE INDEX IF NOT EXISTS idx_email_logs_client ON email_logs(client_id);
 CREATE INDEX IF NOT EXISTS idx_source_pages_source ON source_pages(source_id);
 CREATE INDEX IF NOT EXISTS idx_ingestion_items_run ON ingestion_items(run_id);
 CREATE INDEX IF NOT EXISTS idx_review_items_status ON review_items(status);
+
+CREATE TABLE IF NOT EXISTS media_users (
+  id TEXT PRIMARY KEY,
+  email TEXT UNIQUE NOT NULL,
+  password_hash TEXT NOT NULL,
+  display_name TEXT NOT NULL,
+  role TEXT NOT NULL DEFAULT 'media' CHECK (role = 'media'),
+  active BOOLEAN NOT NULL DEFAULT TRUE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS media_sessions (
+  id TEXT PRIMARY KEY,
+  media_user_id TEXT NOT NULL REFERENCES media_users(id) ON DELETE CASCADE,
+  expires_at TIMESTAMPTZ NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE SEQUENCE IF NOT EXISTS media_assignment_code_seq START WITH 1 INCREMENT BY 1;
+
+CREATE TABLE IF NOT EXISTS media_assignments (
+  id TEXT PRIMARY KEY,
+  code TEXT UNIQUE NOT NULL,
+  discover_client_id TEXT NOT NULL REFERENCES clients(id) ON DELETE CASCADE,
+  client_display_name TEXT NOT NULL,
+  media_user_id TEXT REFERENCES media_users(id) ON DELETE SET NULL,
+  article_title TEXT NOT NULL,
+  eb1a_criterion TEXT,
+  brief TEXT,
+  assigned_by TEXT NOT NULL,
+  assigned_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  due_date DATE,
+  status TEXT NOT NULL DEFAULT 'assigned'
+    CHECK (status IN ('assigned','active','submitted','published','closed','incomplete_closed')),
+  publisher_name TEXT,
+  published_url TEXT,
+  published_at TIMESTAMPTZ,
+  delivered_at TIMESTAMPTZ,
+  closed_reason TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS ma_writer_idx ON media_assignments (media_user_id, status);
+CREATE INDEX IF NOT EXISTS ma_status_idx ON media_assignments (status, due_date);
+CREATE INDEX IF NOT EXISTS ma_client_idx ON media_assignments (discover_client_id);
+CREATE INDEX IF NOT EXISTS media_sessions_user_idx ON media_sessions (media_user_id, expires_at);
+
+CREATE TABLE IF NOT EXISTS media_assignment_events (
+  id TEXT PRIMARY KEY,
+  assignment_id TEXT NOT NULL REFERENCES media_assignments(id) ON DELETE CASCADE,
+  actor_type TEXT NOT NULL CHECK (actor_type IN ('discover_admin','media','system')),
+  actor_id TEXT,
+  kind TEXT NOT NULL,
+  from_status TEXT,
+  to_status TEXT,
+  note TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS mae_assignment_idx ON media_assignment_events (assignment_id, created_at DESC);
+
+CREATE TABLE IF NOT EXISTS media_work_log (
+  id TEXT PRIMARY KEY,
+  assignment_id TEXT NOT NULL REFERENCES media_assignments(id) ON DELETE CASCADE,
+  media_user_id TEXT NOT NULL REFERENCES media_users(id),
+  entry_type TEXT NOT NULL CHECK (entry_type IN ('note','draft','submission')),
+  title TEXT,
+  body TEXT,
+  draft_url TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS mwl_assignment_idx ON media_work_log (assignment_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS mwl_writer_idx ON media_work_log (media_user_id, created_at DESC);

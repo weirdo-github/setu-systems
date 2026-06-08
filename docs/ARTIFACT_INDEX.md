@@ -8,6 +8,7 @@
 - `docs/OPERATIONS_RUNBOOK.md`: smoke tests, recurring checks, and incident response.
 - `docs/PORTAL_FUNCTIONAL_MAP.md`: active and planned portal functions.
 - `docs/DATA_AND_SECURITY.md`: data boundaries, security posture, and production hardening.
+- `docs/MEDIA_PORTAL.md`: Media portal workflow, APIs, data model, and QA checklist.
 
 ## Finance Inherited Artifacts
 
@@ -27,7 +28,7 @@
 - `files/setu_finance_pitch_deck.html`
 - `files/setu_finance_pitch_deck.pptx`
 
-## Discovery Inherited Artifacts
+## Discover Inherited Artifacts
 
 - `docs/discover/PRODUCT_CAPABILITIES.md`
 - `docs/discover/FUNCTIONAL_SPEC.md`
@@ -43,4 +44,5 @@
 - Finance seed source: `server/storage/app-state.json`
 - Discover source registry: `data/source-registry.json`
 - Discover schema: `db/schema.sql`
+- Media repository and auth: `src/lib/mediaRepository.ts`, `src/lib/mediaAuth.ts`
 - Finance migrations: `server/db/migrations/`

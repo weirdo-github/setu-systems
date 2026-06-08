@@ -5,6 +5,15 @@ export type User = {
   role: "admin" | "team";
 };
 
+export type MediaUser = {
+  id: string;
+  email: string;
+  display_name: string;
+  role: "media";
+  active: boolean;
+  created_at?: string;
+};
+
 export type Source = {
   id: string;
   name: string;
@@ -81,6 +90,69 @@ export type ClientRecord = {
   engagement_as_of: string | null;
   created_at?: string;
   updated_at?: string;
+};
+
+export type MediaAssignmentStatus =
+  | "assigned"
+  | "active"
+  | "submitted"
+  | "published"
+  | "closed"
+  | "incomplete_closed";
+
+export type MediaAssignment = {
+  id: string;
+  code: string;
+  discover_client_id: string;
+  client_display_name: string;
+  media_user_id: string | null;
+  writer_name?: string | null;
+  writer_email?: string | null;
+  article_title: string;
+  eb1a_criterion: string | null;
+  brief: string | null;
+  assigned_by: string;
+  assigned_at: string;
+  due_date: string | null;
+  status: MediaAssignmentStatus;
+  publisher_name: string | null;
+  published_url: string | null;
+  published_at: string | null;
+  delivered_at: string | null;
+  closed_reason: string | null;
+  created_at: string;
+  updated_at: string;
+  event_count?: number;
+  work_log_count?: number;
+};
+
+export type MediaAssignmentEvent = {
+  id: string;
+  assignment_id: string;
+  actor_type: "discover_admin" | "media" | "system";
+  actor_id: string | null;
+  kind: string;
+  from_status: MediaAssignmentStatus | null;
+  to_status: MediaAssignmentStatus | null;
+  note: string | null;
+  created_at: string;
+};
+
+export type MediaWorkLog = {
+  id: string;
+  assignment_id: string;
+  media_user_id: string;
+  writer_name?: string | null;
+  entry_type: "note" | "draft" | "submission";
+  title: string | null;
+  body: string | null;
+  draft_url: string | null;
+  created_at: string;
+};
+
+export type MediaAssignmentDetail = MediaAssignment & {
+  events: MediaAssignmentEvent[];
+  work_log: MediaWorkLog[];
 };
 
 export type EmailLog = {

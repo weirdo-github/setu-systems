@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { SetuDiscoverPortal } from "@/components/SetuDiscoverPortal";
 
 export const metadata = {
-  title: "setu discovery",
+  title: "setu discover",
 };
 
 const supportedSections = new Set([
@@ -20,6 +20,7 @@ const supportedSections = new Set([
   "ingestion",
   "review-queue",
   "review",
+  "media",
 ]);
 
 export default async function DiscoverPage({

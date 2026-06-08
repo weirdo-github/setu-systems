@@ -46,12 +46,12 @@ const portals = [
     id: "media",
     eyebrow: "setu",
     name: "Media",
-    href: "",
-    status: "Planned",
+    href: "/media",
+    status: "Live",
     accent: "#A35E72",
     tint: "#EFE3E7",
     Icon: Megaphone,
-    summary: "Press assets, public proof, publications, and external validation workflows.",
+    summary: "Writer assignments, article briefs, submissions, publisher links, and delivery history.",
   },
   {
     id: "referral",
@@ -87,8 +87,8 @@ export default function SystemsLandingPage() {
           <p className="systems-kicker">Unified production workspace</p>
           <h1>One Setu system. Purpose-built portals.</h1>
           <p>
-            A single deployable product family for finance, referral, and discovery operations,
-            designed to grow into customer and media portals without fragmenting the stack.
+            A single deployable product family for finance, referral, discover, and media operations,
+            designed to grow into customer portals without fragmenting the stack.
           </p>
         </div>
       </section>

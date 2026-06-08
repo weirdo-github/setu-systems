@@ -39,7 +39,7 @@ Core functions:
 - Finance-side review before reward routing.
 - Relationship and reward history inside Finance.
 
-## setu discovery
+## setu discover
 
 Route: `/discover`
 
@@ -53,12 +53,27 @@ Core functions:
 - Daily source refresh.
 - Review queue for low-confidence or changed opportunities.
 - Finance engagement status gating.
+- Media tracker for client-to-writer article assignments.
+- Publisher/live-link capture and client media panel.
+
+## setu media
+
+Route: `/media`
+
+Core functions:
+
+- Dedicated media-writer login surface.
+- Writer-specific assignment list.
+- Article brief, EB-1A criterion, due date, and status tracking.
+- Start, save work, and submit workflow.
+- Work-log history for notes, drafts, and submissions.
+- Completed assignment history.
+- Server-side writer ownership enforcement.
 
 ## Planned Portals
 
 Reserved system identities:
 
 - setu customer
-- setu media
 
-These are represented in documentation and portal planning, but are not exposed as production workflows yet.
+This is represented in documentation and portal planning, but is not exposed as a production workflow yet.

@@ -14,6 +14,7 @@ import {
   LinkIcon,
   LogOut,
   Mail,
+  Megaphone,
   Plus,
   RefreshCw,
   Search,
@@ -34,6 +35,9 @@ import type {
   IngestionItem,
   IngestionRun,
   MatchRecord,
+  MediaAssignment,
+  MediaAssignmentDetail,
+  MediaUser,
   ReviewItem,
   Source,
   SourcePage,
@@ -50,6 +54,8 @@ type AppState = {
   ingestionRuns: IngestionRun[];
   ingestionItems: IngestionItem[];
   reviewItems: ReviewItem[];
+  mediaAssignments: MediaAssignment[];
+  mediaWriters: MediaUser[];
   eventCategories: string[];
   criteriaTags: string[];
 };
@@ -63,6 +69,7 @@ const navItems = [
   { id: "sources", label: "Source registry", icon: ShieldCheck },
   { id: "ingestion", label: "Daily refresh", icon: RefreshCw },
   { id: "review", label: "Review queue", icon: Clock3 },
+  { id: "media", label: "Media", icon: Megaphone, adminOnly: true },
 ] as const;
 
 type TabId = (typeof navItems)[number]["id"];
@@ -70,9 +77,9 @@ type TabId = (typeof navItems)[number]["id"];
 const DISCOVER_BASE_PATH = "/discover";
 const DISCOVER_API_BASE = "/api/discover";
 
-const PORTAL_BRAND = "setu discovery";
+const PORTAL_BRAND = "setu discover";
 const PORTAL_SHORT_BRAND = "setu";
-const PORTAL_LABEL = "setu discovery";
+const PORTAL_LABEL = "setu discover";
 
 const tabPathById: Record<TabId, string> = {
   dashboard: DISCOVER_BASE_PATH,
@@ -83,6 +90,7 @@ const tabPathById: Record<TabId, string> = {
   sources: `${DISCOVER_BASE_PATH}/source-registry`,
   ingestion: `${DISCOVER_BASE_PATH}/daily-refresh`,
   review: `${DISCOVER_BASE_PATH}/review-queue`,
+  media: `${DISCOVER_BASE_PATH}/media`,
 };
 
 const tabIdByPath: Record<string, TabId> = {
@@ -100,6 +108,7 @@ const tabIdByPath: Record<string, TabId> = {
   "/ingestion": "ingestion",
   "/review-queue": "review",
   "/review": "review",
+  "/media": "media",
 };
 
 function tabFromPathname(pathname: string): TabId {
@@ -178,6 +187,25 @@ type SourceForm = {
   refresh_enabled: boolean;
   notes: string;
 };
+
+type MediaAssignmentForm = {
+  discover_client_id: string;
+  media_user_id: string;
+  article_title: string;
+  eb1a_criterion: string;
+  brief: string;
+  due_date: string;
+};
+
+const mediaCriteriaOptions = [
+  "published_material",
+  "original_contributions",
+  "authorship",
+  "judging",
+  "awards",
+  "leading_role",
+  "other",
+];
 
 type PushEligibility = {
   pushable: boolean;
@@ -346,6 +374,43 @@ function emptySourceForm(): SourceForm {
   };
 }
 
+function emptyMediaAssignmentForm(
+  clients: ClientRecord[],
+  writers: MediaUser[],
+): MediaAssignmentForm {
+  return {
+    discover_client_id: clients[0]?.id ?? "",
+    media_user_id: writers[0]?.id ?? "",
+    article_title: "",
+    eb1a_criterion: "published_material",
+    brief: "",
+    due_date: "",
+  };
+}
+
+function mediaAssignmentToForm(assignment: MediaAssignment): MediaAssignmentForm {
+  return {
+    discover_client_id: assignment.discover_client_id,
+    media_user_id: assignment.media_user_id ?? "",
+    article_title: assignment.article_title,
+    eb1a_criterion: assignment.eb1a_criterion ?? "published_material",
+    brief: assignment.brief ?? "",
+    due_date: dateInputValue(assignment.due_date),
+  };
+}
+
+function criterionText(value?: string | null) {
+  return (value || "other").replaceAll("_", " ");
+}
+
+function mediaStatusTone(status: string) {
+  if (status === "published" || status === "closed") return "success";
+  if (status === "submitted") return "warn";
+  if (status === "incomplete_closed") return "danger";
+  if (status === "active") return "ink";
+  return "";
+}
+
 function sourceToForm(source: Source): SourceForm {
   return {
     name: source.name,
@@ -492,6 +557,7 @@ export function SetuDiscoverPortal() {
   const [eventModal, setEventModal] = useState<{ event?: EventRecord } | null>(null);
   const [clientModal, setClientModal] = useState<{ client?: ClientRecord } | null>(null);
   const [sourceModal, setSourceModal] = useState<{ source?: Source } | null>(null);
+  const [mediaModal, setMediaModal] = useState<{ assignment?: MediaAssignment } | null>(null);
   const [selectedClientId, setSelectedClientId] = useState("");
   const [matches, setMatches] = useState<MatchRecord[]>([]);
   const [matchesEligibility, setMatchesEligibility] = useState<PushEligibility>(null);
@@ -542,8 +608,8 @@ export function SetuDiscoverPortal() {
 
   useEffect(() => {
     document.title = activeTab === "dashboard"
-      ? "setu discovery"
-      : `setu discovery - ${topbarTitle(activeTab)}`;
+      ? "setu discover"
+      : `setu discover - ${topbarTitle(activeTab)}`;
   }, [activeTab]);
 
   useEffect(() => {
@@ -655,7 +721,9 @@ export function SetuDiscoverPortal() {
           </button>
         </div>
         <div className="nav-label">Operate</div>
-        {navItems.map((item) => {
+        {navItems
+          .filter((item) => !("adminOnly" in item) || state.user.role === "admin")
+          .map((item) => {
           const Icon = item.icon;
           return (
             <button
@@ -669,6 +737,7 @@ export function SetuDiscoverPortal() {
               {item.id === "inventory" ? <span className="badge">{state.events.length}</span> : null}
               {item.id === "clients" ? <span className="badge">{state.clients.length}</span> : null}
               {item.id === "review" ? <span className="badge">{state.reviewItems.filter((review) => review.status === "open").length}</span> : null}
+              {item.id === "media" ? <span className="badge">{state.mediaAssignments.length}</span> : null}
             </button>
           );
         })}
@@ -810,6 +879,19 @@ export function SetuDiscoverPortal() {
               }}
             />
           ) : null}
+          {activeTab === "media" ? (
+            state.user.role === "admin" ? (
+              <MediaAdminView
+                assignments={state.mediaAssignments}
+                clients={state.clients}
+                writers={state.mediaWriters}
+                onNew={() => setMediaModal({})}
+                onEdit={(assignment) => setMediaModal({ assignment })}
+              />
+            ) : (
+              <div className="empty">Media administration requires Discover admin access.</div>
+            )
+          ) : null}
         </div>
       </main>
 
@@ -836,6 +918,9 @@ export function SetuDiscoverPortal() {
       {clientModal ? (
         <ClientModal
           client={clientModal.client}
+          mediaAssignments={state.mediaAssignments.filter(
+            (assignment) => assignment.discover_client_id === clientModal.client?.id,
+          )}
           onClose={() => setClientModal(null)}
           onSave={async (form) => {
             const url = clientModal.client ? `/api/clients/${clientModal.client.id}` : "/api/clients";
@@ -847,6 +932,29 @@ export function SetuDiscoverPortal() {
             await refresh();
             showToast("Client saved");
           }}
+        />
+      ) : null}
+
+      {mediaModal ? (
+        <MediaAssignmentModal
+          assignment={mediaModal.assignment}
+          clients={state.clients}
+          writers={state.mediaWriters}
+          onClose={() => setMediaModal(null)}
+          onRefresh={refresh}
+          onSave={async (form) => {
+            const url = mediaModal.assignment
+              ? `/api/media/assignments/${mediaModal.assignment.id}`
+              : "/api/media/assignments";
+            await requestJson(url, {
+              method: mediaModal.assignment ? "PATCH" : "POST",
+              body: JSON.stringify(form),
+            });
+            setMediaModal(null);
+            await refresh();
+            showToast(mediaModal.assignment ? "Media assignment updated" : "Media assignment created");
+          }}
+          showToast={showToast}
         />
       ) : null}
 
@@ -902,12 +1010,12 @@ function LoginShell({
       <div className="auth-shell">
         <div className="auth-grid">
         <section className="auth-hero">
-          <div className="wordmark discover-login-logo" aria-label="setu discovery">
+          <div className="wordmark discover-login-logo" aria-label="setu discover">
             <span className="letters">setu</span>
             <span className="deck" />
             <span className="brand-sub">{PORTAL_LABEL}</span>
           </div>
-          <div className="auth-kicker">setu discovery</div>
+          <div className="auth-kicker">setu discover</div>
           <h1>{PORTAL_BRAND}</h1>
           <p className="auth-copy">
             Inventory, client profile coverage, transparent matching, and team email logging on a local database.
@@ -915,7 +1023,7 @@ function LoginShell({
           <div className="auth-points">
             <div className="auth-point">
               <Database size={18} />
-              Real Postgres records for the discovery system of record.
+              Real Postgres records for the Discover system of record.
             </div>
             <div className="auth-point">
               <Sparkles size={18} />
@@ -1729,7 +1837,7 @@ function SourcesView({
           </span>
         </div>
         <InfoNote>
-          The source registry is the canonical allowlist. Discovery should use official host pages and avoid aggregators.
+          The source registry is the canonical allowlist. Discover should use official host pages and avoid aggregators.
         </InfoNote>
         <div className="card sheet-wrap">
           <div className="sheet">
@@ -2040,6 +2148,370 @@ function ReviewQueueView({
   );
 }
 
+function MediaAdminView({
+  assignments,
+  clients,
+  writers,
+  onNew,
+  onEdit,
+}: {
+  assignments: MediaAssignment[];
+  clients: ClientRecord[];
+  writers: MediaUser[];
+  onNew: () => void;
+  onEdit: (assignment: MediaAssignment) => void;
+}) {
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [writerFilter, setWriterFilter] = useState("all");
+  const visibleAssignments = assignments.filter((assignment) => {
+    const statusMatches = statusFilter === "all" || assignment.status === statusFilter;
+    const writerMatches = writerFilter === "all" || assignment.media_user_id === writerFilter;
+    return statusMatches && writerMatches;
+  });
+  const publishedCount = assignments.filter((assignment) => assignment.status === "published").length;
+  const submittedCount = assignments.filter((assignment) => assignment.status === "submitted").length;
+  const openCount = assignments.filter((assignment) =>
+    ["assigned", "active", "submitted"].includes(assignment.status),
+  ).length;
+
+  return (
+    <>
+      <div className="metrics">
+        <Metric label="Open media" value={openCount} icon={<Megaphone size={15} />} detail="Assigned, active, or submitted" accent />
+        <Metric label="Submitted" value={submittedCount} icon={<Send size={15} />} detail="Ready for admin review" />
+        <Metric label="Published" value={publishedCount} icon={<LinkIcon size={15} />} detail="Live links recorded" />
+        <Metric label="Writers" value={writers.length} icon={<Users size={15} />} detail={`${clients.length} Discover clients available`} />
+      </div>
+      <section className="section">
+        <div className="section-head">
+          <h2>Media tracker</h2>
+          <button className="btn btn-primary" type="button" onClick={onNew}>
+            <Plus size={15} />
+            Assign media
+          </button>
+        </div>
+        <InfoNote>
+          Tracks the client-to-writer-to-publisher workflow. Live publication links are recorded by Discover admins only.
+        </InfoNote>
+        <div className="toolbar">
+          <select className="search-input category-filter" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}>
+            <option value="all">All statuses</option>
+            {["assigned", "active", "submitted", "published", "closed", "incomplete_closed"].map((status) => (
+              <option key={status} value={status}>{status}</option>
+            ))}
+          </select>
+          <select className="search-input category-filter" value={writerFilter} onChange={(event) => setWriterFilter(event.target.value)}>
+            <option value="all">All writers</option>
+            {writers.map((writer) => (
+              <option key={writer.id} value={writer.id}>{writer.display_name}</option>
+            ))}
+          </select>
+          <span className="chip">{visibleAssignments.length} visible</span>
+        </div>
+        <div className="card sheet-wrap">
+          <div className="sheet">
+            <div className="trow head media-admin-grid">
+              <span>Client / article</span>
+              <span>Criterion</span>
+              <span>Writer</span>
+              <span>Timeline</span>
+              <span>Status</span>
+              <span>Publisher</span>
+              <span>Actions</span>
+            </div>
+            {visibleAssignments.map((assignment) => (
+              <div className="trow media-admin-grid" key={assignment.id}>
+                <div>
+                  <button className="name-button" type="button" onClick={() => onEdit(assignment)}>
+                    {assignment.client_display_name}
+                  </button>
+                  <div className="sub">{assignment.code} · {assignment.article_title}</div>
+                </div>
+                <span>{criterionText(assignment.eb1a_criterion)}</span>
+                <span>{assignment.writer_name ?? "Unassigned"}</span>
+                <span className="mono">{deadlineText(assignment.due_date)}</span>
+                <span className={`pill ${mediaStatusTone(assignment.status)}`}>{assignment.status}</span>
+                <div>
+                  <div>{assignment.publisher_name ?? "Not published"}</div>
+                  {assignment.published_url ? (
+                    <a className="inline-link" href={assignment.published_url} target="_blank" rel="noreferrer">
+                      <LinkIcon size={13} />
+                      Live link
+                    </a>
+                  ) : null}
+                </div>
+                <button className="btn btn-ghost" type="button" onClick={() => onEdit(assignment)}>
+                  <FileText size={15} />
+                  Detail
+                </button>
+              </div>
+            ))}
+            {!visibleAssignments.length ? <div className="empty">No media assignments match the current filters.</div> : null}
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+
+function MediaAssignmentModal({
+  assignment,
+  clients,
+  writers,
+  onClose,
+  onSave,
+  onRefresh,
+  showToast,
+}: {
+  assignment?: MediaAssignment;
+  clients: ClientRecord[];
+  writers: MediaUser[];
+  onClose: () => void;
+  onSave: (form: MediaAssignmentForm) => Promise<void>;
+  onRefresh: () => Promise<void>;
+  showToast: (message: string) => void;
+}) {
+  const [form, setForm] = useState<MediaAssignmentForm>(
+    assignment ? mediaAssignmentToForm(assignment) : emptyMediaAssignmentForm(clients, writers),
+  );
+  const [detail, setDetail] = useState<MediaAssignmentDetail | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [actionNote, setActionNote] = useState("");
+  const [closeReason, setCloseReason] = useState("");
+  const [publisherName, setPublisherName] = useState(assignment?.publisher_name ?? "");
+  const [publishedUrl, setPublishedUrl] = useState(assignment?.published_url ?? "");
+  const [publishedAt, setPublishedAt] = useState(dateInputValue(assignment?.published_at ?? null));
+  const status = detail?.status ?? assignment?.status;
+  const canEdit = !assignment || ["assigned", "active", "submitted"].includes(status ?? "");
+  const canPublish = status === "submitted" || status === "published";
+  const canClose = status === "published";
+  const canIncompleteClose = Boolean(status && ["assigned", "active", "submitted"].includes(status));
+  const canReopen = Boolean(status && ["closed", "incomplete_closed"].includes(status));
+
+  const update = (key: keyof MediaAssignmentForm, value: string) => {
+    setForm((current) => ({ ...current, [key]: value }));
+  };
+
+  const loadDetail = useCallback(async () => {
+    if (!assignment) {
+      setDetail(null);
+      return;
+    }
+    const payload = await requestJson<{ assignment: MediaAssignmentDetail }>(`/api/media/assignments/${assignment.id}`);
+    setDetail(payload.assignment);
+    setPublisherName(payload.assignment.publisher_name ?? "");
+    setPublishedUrl(payload.assignment.published_url ?? "");
+    setPublishedAt(dateInputValue(payload.assignment.published_at));
+  }, [assignment]);
+
+  useEffect(() => {
+    void loadDetail();
+  }, [loadDetail]);
+
+  const runAction = async (path: string, body: Record<string, unknown>, message: string) => {
+    if (!assignment) return;
+    await requestJson(`/api/media/assignments/${assignment.id}/${path}`, {
+      method: "POST",
+      body: JSON.stringify(body),
+    });
+    await loadDetail();
+    await onRefresh();
+    showToast(message);
+  };
+
+  return (
+    <div className="modal-back">
+      <form
+        className="modal wide"
+        onSubmit={async (event) => {
+          event.preventDefault();
+          if (!canEdit) return;
+          setSaving(true);
+          await onSave(form);
+          setSaving(false);
+        }}
+      >
+        <div className="modal-head">
+          <div>
+            <div className="card-label">Media engagement</div>
+            <h3>{assignment ? "Media assignment detail" : "Assign media"}</h3>
+            {assignment ? <div className="sub">{assignment.code} · {assignment.status}</div> : null}
+          </div>
+          <button className="x" onClick={onClose} type="button"><X size={18} /></button>
+        </div>
+        <div className="modal-body">
+          <div className="field-row">
+            <div className="field">
+              <label>Discover client</label>
+              <select value={form.discover_client_id} onChange={(event) => update("discover_client_id", event.target.value)} disabled={Boolean(assignment)}>
+                {clients.map((client) => (
+                  <option key={client.id} value={client.id}>{client.name}</option>
+                ))}
+              </select>
+            </div>
+            <div className="field">
+              <label>Media writer</label>
+              <select value={form.media_user_id} onChange={(event) => update("media_user_id", event.target.value)} disabled={!canEdit}>
+                {writers.map((writer) => (
+                  <option key={writer.id} value={writer.id}>{writer.display_name}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="field-row">
+            <FieldInput label="Article title" value={form.article_title} onChange={(value) => update("article_title", value)} required />
+            <div className="field">
+              <label>EB-1A criterion</label>
+              <select value={form.eb1a_criterion} onChange={(event) => update("eb1a_criterion", event.target.value)} disabled={!canEdit}>
+                {mediaCriteriaOptions.map((criterion) => (
+                  <option key={criterion} value={criterion}>{criterionText(criterion)}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <FieldInput label="Due date" type="date" value={form.due_date} onChange={(value) => update("due_date", value)} />
+          <FieldTextarea label="Brief" value={form.brief} onChange={(value) => update("brief", value)} />
+
+          {canEdit ? (
+            <div className="modal-foot" style={{ justifyContent: "flex-start", padding: 0, borderTop: 0 }}>
+              <button className="btn btn-primary" disabled={saving} type="submit">
+                <CheckCircle2 size={15} />
+                {assignment ? "Save assignment" : "Create assignment"}
+              </button>
+            </div>
+          ) : (
+            <InfoNote>Article content fields are locked for this status.</InfoNote>
+          )}
+
+          {assignment ? (
+            <>
+              <section className="section">
+                <div className="section-head">
+                  <h2>Admin actions</h2>
+                  <span className={`pill ${mediaStatusTone(status ?? "")}`}>{status}</span>
+                </div>
+                <div className="field">
+                  <label>Action note</label>
+                  <textarea value={actionNote} onChange={(event) => setActionNote(event.target.value)} />
+                </div>
+                <div className="tag-cloud">
+                  <button className="btn btn-ghost" type="button" disabled={status !== "submitted"} onClick={() => void runAction("return", { note: actionNote }, "Assignment returned")}>
+                    <Clock3 size={15} />
+                    Return
+                  </button>
+                  <button className="btn btn-ghost" type="button" disabled={!canClose} onClick={() => void runAction("close", { note: actionNote }, "Assignment closed")}>
+                    <CheckCircle2 size={15} />
+                    Close
+                  </button>
+                  <button className="btn btn-ghost" type="button" disabled={!canReopen} onClick={() => void runAction("reopen", { note: actionNote }, "Assignment reopened")}>
+                    <RefreshCw size={15} />
+                    Reopen
+                  </button>
+                </div>
+                {canIncompleteClose ? (
+                  <div className="field-row" style={{ marginTop: 12 }}>
+                    <FieldInput label="Incomplete close reason" value={closeReason} onChange={setCloseReason} />
+                    <div className="field" style={{ justifyContent: "end" }}>
+                      <button className="btn btn-ghost btn-danger" type="button" onClick={() => void runAction("incomplete-close", { reason: closeReason }, "Assignment incomplete-closed")}>
+                        <X size={15} />
+                        Incomplete close
+                      </button>
+                    </div>
+                  </div>
+                ) : null}
+              </section>
+
+              <section className="section">
+                <div className="section-head">
+                  <h2>Publication</h2>
+                  <span className="chip">Admin controlled live link</span>
+                </div>
+                <div className="field-row">
+                  <FieldInput label="Publisher" value={publisherName} onChange={setPublisherName} />
+                  <FieldInput label="Live link" value={publishedUrl} onChange={setPublishedUrl} />
+                </div>
+                <FieldInput label="Published date" type="date" value={publishedAt} onChange={setPublishedAt} />
+                <button className="btn btn-primary" type="button" disabled={!canPublish} onClick={() => void runAction("publish", {
+                  publisher_name: publisherName,
+                  published_url: publishedUrl,
+                  published_at: publishedAt,
+                }, "Publication recorded")}>
+                  <LinkIcon size={15} />
+                  Record publication
+                </button>
+              </section>
+
+              <section className="section">
+                <div className="section-head">
+                  <h2>Writer work</h2>
+                  <span className="chip">{detail?.work_log.length ?? 0} entries</span>
+                </div>
+                <div className="card sheet-wrap">
+                  <div className="sheet">
+                    <div className="trow head media-work-grid">
+                      <span>Time</span>
+                      <span>Type</span>
+                      <span>Work</span>
+                      <span>Draft link</span>
+                    </div>
+                    {(detail?.work_log ?? []).map((entry) => (
+                      <div className="trow media-work-grid" key={entry.id}>
+                        <span className="mono">{dateTimeText(entry.created_at)}</span>
+                        <span className="pill">{entry.entry_type}</span>
+                        <div>
+                          <div className="cust">{entry.title || "Untitled"}</div>
+                          <div className="sub">{entry.body || "No body"}</div>
+                        </div>
+                        {entry.draft_url ? (
+                          <a className="inline-link" href={entry.draft_url} target="_blank" rel="noreferrer">
+                            <LinkIcon size={13} />
+                            Open draft
+                          </a>
+                        ) : <span className="sub">No link</span>}
+                      </div>
+                    ))}
+                    {detail && !detail.work_log.length ? <div className="empty">No writer work saved yet.</div> : null}
+                  </div>
+                </div>
+              </section>
+
+              <section className="section">
+                <div className="section-head">
+                  <h2>Event history</h2>
+                  <span className="chip">{detail?.events.length ?? 0} events</span>
+                </div>
+                <div className="card sheet-wrap">
+                  <div className="sheet">
+                    <div className="trow head media-event-grid">
+                      <span>Time</span>
+                      <span>Actor</span>
+                      <span>Event</span>
+                      <span>Status</span>
+                      <span>Note</span>
+                    </div>
+                    {(detail?.events ?? []).map((event) => (
+                      <div className="trow media-event-grid" key={event.id}>
+                        <span className="mono">{dateTimeText(event.created_at)}</span>
+                        <span>{event.actor_type}</span>
+                        <span className="pill">{event.kind}</span>
+                        <span className="sub">{[event.from_status, event.to_status].filter(Boolean).join(" -> ")}</span>
+                        <span className="sub">{event.note ?? ""}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </section>
+            </>
+          ) : null}
+        </div>
+        <div className="modal-foot">
+          <button className="btn" type="button" onClick={onClose}>Done</button>
+        </div>
+      </form>
+    </div>
+  );
+}
+
 function EventModal({
   categories,
   criteriaTags,
@@ -2147,10 +2619,12 @@ function EventModal({
 
 function ClientModal({
   client,
+  mediaAssignments,
   onClose,
   onSave,
 }: {
   client?: ClientRecord;
+  mediaAssignments?: MediaAssignment[];
   onClose: () => void;
   onSave: (form: ClientForm) => Promise<void>;
 }) {
@@ -2179,6 +2653,34 @@ function ClientModal({
           <button className="x" onClick={onClose} type="button"><X size={18} /></button>
         </div>
         <div className="modal-body">
+          {client ? (
+            <div className="card" style={{ padding: 16 }}>
+              <div className="section-head" style={{ marginBottom: 10 }}>
+                <h2 style={{ fontSize: 18 }}>Media panel</h2>
+                <span className="chip">{mediaAssignments?.length ?? 0} assignments</span>
+              </div>
+              {(mediaAssignments ?? []).map((assignment) => (
+                <div className="health-row" key={assignment.id}>
+                  <div>
+                    <div className="cust">{assignment.article_title}</div>
+                    <div className="sub">
+                      {assignment.code} · {criterionText(assignment.eb1a_criterion)} · {assignment.writer_name ?? "Unassigned"}
+                    </div>
+                    {assignment.published_url ? (
+                      <a className="inline-link" href={assignment.published_url} target="_blank" rel="noreferrer">
+                        <LinkIcon size={13} />
+                        Live link
+                      </a>
+                    ) : null}
+                  </div>
+                  <span className={`pill ${mediaStatusTone(assignment.status)}`}>{assignment.status}</span>
+                </div>
+              ))}
+              {client && !(mediaAssignments ?? []).length ? (
+                <div className="empty">No media assignments recorded for this client yet.</div>
+              ) : null}
+            </div>
+          ) : null}
           <div className="field-row">
             <FieldInput label="Name" value={form.name} onChange={(value) => update("name", value)} required />
             <FieldInput label="Email" type="email" value={form.email} onChange={(value) => update("email", value)} required />
@@ -2556,6 +3058,7 @@ function topbarTitle(tab: TabId) {
     sources: "Source registry",
     ingestion: "Daily refresh",
     review: "Review queue",
+    media: "Media tracker",
   }[tab];
 }
 
@@ -2569,5 +3072,6 @@ function topbarSubtitle(tab: TabId) {
     sources: "Canonical domains, seed pages, refresh status, and source-page change tracking.",
     ingestion: "Guarded fetch, change detection, structured extraction, review flags, and match refresh.",
     review: "Low-confidence extractions and pay-to-play flags ready for team disposition.",
+    media: "Article assignments, writer progress, publisher links, and client delivery status.",
   }[tab];
 }

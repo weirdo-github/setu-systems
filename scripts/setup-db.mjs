@@ -9,6 +9,7 @@ const { Pool } = pg;
 let databaseUrl =
   process.env.DATABASE_URL || "postgres://discover:discover@localhost:5435/discover";
 const localPassword = "discover123";
+const localMediaPassword = "media123";
 
 function loadEnvFile(filePath) {
   if (!existsSync(filePath)) return;
@@ -165,6 +166,33 @@ async function main() {
          password_hash = EXCLUDED.password_hash,
          role = EXCLUDED.role`,
       [user.id, user.name, user.email, hashPassword(localPassword), user.role],
+    );
+  }
+
+  const mediaUsers = [
+    {
+      id: "medusr_writer1",
+      email: "writer1@media.local",
+      displayName: "Media Writer One",
+    },
+    {
+      id: "medusr_writer2",
+      email: "writer2@media.local",
+      displayName: "Media Writer Two",
+    },
+  ];
+
+  for (const user of mediaUsers) {
+    await pool.query(
+      `INSERT INTO media_users (id, email, password_hash, display_name, role, active)
+       VALUES ($1, $2, $3, $4, 'media', TRUE)
+       ON CONFLICT (id) DO UPDATE SET
+         email = EXCLUDED.email,
+         password_hash = EXCLUDED.password_hash,
+         display_name = EXCLUDED.display_name,
+         role = 'media',
+         active = TRUE`,
+      [user.id, user.email, hashPassword(localMediaPassword), user.displayName],
     );
   }
 

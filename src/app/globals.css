@@ -641,6 +641,26 @@
   grid-template-columns: minmax(250px, 1.25fr) 96px minmax(160px, 0.85fr) minmax(230px, 1.15fr) 132px;
 }
 
+.discover-shell .media-admin-grid {
+  grid-template-columns: minmax(230px, 1.25fr) 132px minmax(136px, 0.75fr) 108px 124px minmax(150px, 0.85fr) 106px;
+}
+
+.discover-shell .media-assignment-grid {
+  grid-template-columns: 120px minmax(240px, 1.3fr) 142px 112px 110px 108px;
+}
+
+.discover-shell .media-work-grid {
+  grid-template-columns: 142px 100px minmax(260px, 1.5fr) 132px;
+}
+
+.discover-shell .media-event-grid {
+  grid-template-columns: 142px 132px 132px 144px minmax(260px, 1.5fr);
+}
+
+.discover-shell .media-work-card {
+  padding: 18px;
+}
+
 .discover-shell .dashboard-opportunity-grid {
   grid-template-columns: minmax(260px, 1.35fr) 132px 74px 96px 112px 72px;
 }
@@ -1291,7 +1311,11 @@
 .discover-shell .review-grid,
 .discover-shell .client-grid,
 .discover-shell .inventory-grid,
-.discover-shell .match-grid {
+.discover-shell .match-grid,
+.discover-shell .media-admin-grid,
+.discover-shell .media-assignment-grid,
+.discover-shell .media-work-grid,
+.discover-shell .media-event-grid {
     grid-template-columns: 1fr;
   }
 

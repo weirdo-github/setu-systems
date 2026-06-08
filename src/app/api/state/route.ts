@@ -11,6 +11,7 @@ import {
   listSourcePages,
   listSources,
 } from "@/lib/repository";
+import { listAssignmentsForAdmin, listMediaWriters } from "@/lib/mediaRepository";
 
 export async function GET() {
   const { user, response } = await requireUser();
@@ -25,6 +26,8 @@ export async function GET() {
     ingestionRuns,
     ingestionItems,
     reviewItems,
+    mediaAssignments,
+    mediaWriters,
   ] = await Promise.all([
     listEvents(),
     listClients(),
@@ -34,6 +37,8 @@ export async function GET() {
     listIngestionRuns(),
     listIngestionItems(),
     listReviewItems(),
+    user?.role === "admin" ? listAssignmentsForAdmin() : Promise.resolve([]),
+    user?.role === "admin" ? listMediaWriters() : Promise.resolve([]),
   ]);
 
   return NextResponse.json({
@@ -46,6 +51,8 @@ export async function GET() {
     ingestionRuns,
     ingestionItems,
     reviewItems,
+    mediaAssignments,
+    mediaWriters,
     eventCategories: EVENT_CATEGORIES,
     criteriaTags: CRITERIA_TAGS,
   });

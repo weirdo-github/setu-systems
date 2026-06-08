@@ -43,3 +43,25 @@ export const credibilityLabels: Record<number, string> = {
 };
 
 export const sessionCookieName = "discover_session";
+export const mediaSessionCookieName = "media_session";
+
+export const MEDIA_CRITERIA_TAGS = [
+  "published_material",
+  "original_contributions",
+  "authorship",
+  "judging",
+  "awards",
+  "leading_role",
+  "other",
+] as const;
+
+export const MEDIA_ASSIGNMENT_STATUSES = [
+  "assigned",
+  "active",
+  "submitted",
+  "published",
+  "closed",
+  "incomplete_closed",
+] as const;
+
+export const MEDIA_WORK_ENTRY_TYPES = ["note", "draft", "submission"] as const;
