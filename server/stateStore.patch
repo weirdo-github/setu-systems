@@ -1,0 +1,24 @@
+--- a/server/stateStore.js
++++ b/server/stateStore.js
+@@ -1,4 +1,5 @@
+ // At the top of the file or with other requires/imports:
++const { validateDiscountPct } = require('./validation/invoiceValidation');
+ 
+ // In createInvoiceRecord function (around line 5973), replace:
+ //
+@@ -6,8 +7,16 @@
+ //   const discountPct = Number(form.discountPct || 0);
+ //
+ // With:
+-  const discountPct = Number(form.discountPct || 0);
++  const discountPctResult = validateDiscountPct(form.discountPct);
++  if (!discountPctResult.valid) {
++    return res.status(400).json({
++      success: false,
++      error: discountPctResult.error
++    });
++  }
++  const discountPct = discountPctResult.value;
+ 
+ // The rest of the function (calculateInvoiceAmounts call etc.) remains unchanged.
+ // calculateInvoiceAmounts(amount, discountPct, 0) will now always receive 0 <= discountPct <= 100.
