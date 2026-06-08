@@ -1,0 +1,700 @@
+[
+  {
+    "id": "src_eb1a_001_the_conversation",
+    "registry_rank": 1,
+    "name": "The Conversation (US) \u2014 Pitch an article",
+    "organization": "The Conversation",
+    "source_category": "Authorship",
+    "criteria_tags": [
+      "Scholarly Articles",
+      "Published Material"
+    ],
+    "typical_fee": "Free",
+    "canonical_domain": "theconversation.com",
+    "seed_url": "https://theconversation.com/us/pitches",
+    "credibility_tier": 1,
+    "notes": "Requires university/research affiliation; PhD candidates eligible. Builds authorship + media-about-you."
+  },
+  {
+    "id": "src_eb1a_002_ieee",
+    "registry_rank": 2,
+    "name": "Publications: Special Issues & Calls for Papers",
+    "organization": "IEEE",
+    "source_category": "Authorship",
+    "criteria_tags": [
+      "Scholarly Articles"
+    ],
+    "typical_fee": "Free (OA fees vary)",
+    "canonical_domain": "ieee.org",
+    "seed_url": "https://www.ieee.org/publications/",
+    "credibility_tier": 1,
+    "notes": "Transactions & magazines special issues and CFPs."
+  },
+  {
+    "id": "src_eb1a_003_acm",
+    "registry_rank": 3,
+    "name": "Communications of the ACM \u2014 Contributed Articles",
+    "organization": "ACM",
+    "source_category": "Authorship",
+    "criteria_tags": [
+      "Scholarly Articles"
+    ],
+    "typical_fee": "Free",
+    "canonical_domain": "cacm.acm.org",
+    "seed_url": "https://cacm.acm.org/",
+    "credibility_tier": 1,
+    "notes": "Practitioner-facing computer-science articles."
+  },
+  {
+    "id": "src_eb1a_004_springer_nature",
+    "registry_rank": 4,
+    "name": "Nature Portfolio \u2014 Collections & Comment",
+    "organization": "Springer Nature",
+    "source_category": "Authorship",
+    "criteria_tags": [
+      "Scholarly Articles"
+    ],
+    "typical_fee": "OA fees vary",
+    "canonical_domain": "nature.com",
+    "seed_url": "https://www.nature.com/",
+    "credibility_tier": 1,
+    "notes": "Special collections; Comment / World View pitches."
+  },
+  {
+    "id": "src_eb1a_005_hbr",
+    "registry_rank": 5,
+    "name": "Harvard Business Review \u2014 Author Guidelines",
+    "organization": "HBR",
+    "source_category": "Authorship",
+    "criteria_tags": [
+      "Scholarly Articles"
+    ],
+    "typical_fee": "Free",
+    "canonical_domain": "hbr.org",
+    "seed_url": "https://hbr.org/guidelines-for-authors",
+    "credibility_tier": 1,
+    "notes": "Management/business audience. Confirm current path."
+  },
+  {
+    "id": "src_eb1a_006_ieee",
+    "registry_rank": 6,
+    "name": "IEEE Spectrum \u2014 Contribute",
+    "organization": "IEEE",
+    "source_category": "Authorship",
+    "criteria_tags": [
+      "Scholarly Articles",
+      "Published Material"
+    ],
+    "typical_fee": "Free",
+    "canonical_domain": "spectrum.ieee.org",
+    "seed_url": "https://spectrum.ieee.org/",
+    "credibility_tier": 2,
+    "notes": "Tech features / opinion for a broad audience."
+  },
+  {
+    "id": "src_eb1a_007_frontiers",
+    "registry_rank": 7,
+    "name": "Frontiers \u2014 Research Topics (article collections)",
+    "organization": "Frontiers",
+    "source_category": "Authorship",
+    "criteria_tags": [
+      "Scholarly Articles"
+    ],
+    "typical_fee": "OA fees",
+    "canonical_domain": "frontiersin.org",
+    "seed_url": "https://www.frontiersin.org/",
+    "credibility_tier": 2,
+    "notes": "Propose or contribute to Research Topics."
+  },
+  {
+    "id": "src_eb1a_008_plos",
+    "registry_rank": 8,
+    "name": "PLOS \u2014 Journals",
+    "organization": "PLOS",
+    "source_category": "Authorship",
+    "criteria_tags": [
+      "Scholarly Articles"
+    ],
+    "typical_fee": "OA fees",
+    "canonical_domain": "plos.org",
+    "seed_url": "https://plos.org/",
+    "credibility_tier": 2,
+    "notes": "Reputable open-access publisher."
+  },
+  {
+    "id": "src_eb1a_009_nih",
+    "registry_rank": 9,
+    "name": "NIH CSR \u2014 Early Career Reviewer Program",
+    "organization": "NIH",
+    "source_category": "Judging",
+    "criteria_tags": [
+      "Judging"
+    ],
+    "typical_fee": "Free",
+    "canonical_domain": "public.csr.nih.gov",
+    "seed_url": "https://public.csr.nih.gov/ForReviewers/BecomeAReviewer/ECR",
+    "credibility_tier": 1,
+    "notes": "Grant peer review. Needs doctorate + faculty/equivalent role."
+  },
+  {
+    "id": "src_eb1a_010_nsf",
+    "registry_rank": 10,
+    "name": "Volunteer to Review (panelist / ad hoc)",
+    "organization": "NSF",
+    "source_category": "Judging",
+    "criteria_tags": [
+      "Judging"
+    ],
+    "typical_fee": "Free",
+    "canonical_domain": "nsf.gov",
+    "seed_url": "https://www.nsf.gov/funding/merit-review/volunteer",
+    "credibility_tier": 1,
+    "notes": "Register via Research.gov; panels in-person or virtual."
+  },
+  {
+    "id": "src_eb1a_011_elsevier",
+    "registry_rank": 11,
+    "name": "Reviewer Hub \u2014 become a peer reviewer",
+    "organization": "Elsevier",
+    "source_category": "Judging",
+    "criteria_tags": [
+      "Judging"
+    ],
+    "typical_fee": "Free",
+    "canonical_domain": "elsevier.com",
+    "seed_url": "https://www.elsevier.com/",
+    "credibility_tier": 2,
+    "notes": "Journal peer review across titles. Confirm reviewer-hub path."
+  },
+  {
+    "id": "src_eb1a_012_springer_nature",
+    "registry_rank": 12,
+    "name": "For Reviewers \u2014 peer review",
+    "organization": "Springer Nature",
+    "source_category": "Judging",
+    "criteria_tags": [
+      "Judging"
+    ],
+    "typical_fee": "Free",
+    "canonical_domain": "springernature.com",
+    "seed_url": "https://www.springernature.com/",
+    "credibility_tier": 2,
+    "notes": "Reviewer opportunities. Confirm reviewer path."
+  },
+  {
+    "id": "src_eb1a_013_acm",
+    "registry_rank": 13,
+    "name": "Conferences \u2014 CFPs + Program Committees",
+    "organization": "ACM",
+    "source_category": "Speaking",
+    "criteria_tags": [
+      "Original Contributions",
+      "Leading/Critical Role",
+      "Judging"
+    ],
+    "typical_fee": "Free",
+    "canonical_domain": "acm.org",
+    "seed_url": "https://www.acm.org/conferences",
+    "credibility_tier": 1,
+    "notes": "Talks plus program-committee / reviewer roles across SIGs."
+  },
+  {
+    "id": "src_eb1a_014_ieee",
+    "registry_rank": 14,
+    "name": "Conferences \u2014 CFPs + Technical Program Committees",
+    "organization": "IEEE",
+    "source_category": "Speaking",
+    "criteria_tags": [
+      "Original Contributions",
+      "Leading/Critical Role",
+      "Judging"
+    ],
+    "typical_fee": "Free",
+    "canonical_domain": "ieee.org",
+    "seed_url": "https://www.ieee.org/conferences/",
+    "credibility_tier": 1,
+    "notes": "Talks plus TPC roles."
+  },
+  {
+    "id": "src_eb1a_015_usenix",
+    "registry_rank": 15,
+    "name": "Conferences \u2014 Calls for Papers",
+    "organization": "USENIX",
+    "source_category": "Speaking",
+    "criteria_tags": [
+      "Original Contributions",
+      "Leading/Critical Role"
+    ],
+    "typical_fee": "Free",
+    "canonical_domain": "usenix.org",
+    "seed_url": "https://www.usenix.org/conferences",
+    "credibility_tier": 1,
+    "notes": "Systems, security and related venues."
+  },
+  {
+    "id": "src_eb1a_016_acm",
+    "registry_rank": 16,
+    "name": "ACM SIGKDD \u2014 KDD Call for Papers",
+    "organization": "ACM",
+    "source_category": "Speaking",
+    "criteria_tags": [
+      "Original Contributions",
+      "Scholarly Articles",
+      "Leading/Critical Role"
+    ],
+    "typical_fee": "Free",
+    "canonical_domain": "kdd.org",
+    "seed_url": "https://www.kdd.org/",
+    "credibility_tier": 1,
+    "notes": "Top data-mining / data-science venue."
+  },
+  {
+    "id": "src_eb1a_017_amia",
+    "registry_rank": 17,
+    "name": "Annual Symposium \u2014 Call for Participation",
+    "organization": "AMIA",
+    "source_category": "Speaking",
+    "criteria_tags": [
+      "Original Contributions",
+      "Scholarly Articles",
+      "Leading/Critical Role"
+    ],
+    "typical_fee": "Free",
+    "canonical_domain": "amia.org",
+    "seed_url": "https://amia.org/",
+    "credibility_tier": 2,
+    "notes": "Biomedical & health informatics (healthcare clients)."
+  },
+  {
+    "id": "src_eb1a_018_himss",
+    "registry_rank": 18,
+    "name": "Global Conference \u2014 Call for Proposals",
+    "organization": "HIMSS",
+    "source_category": "Speaking",
+    "criteria_tags": [
+      "Original Contributions",
+      "Leading/Critical Role"
+    ],
+    "typical_fee": "Free",
+    "canonical_domain": "himss.org",
+    "seed_url": "https://www.himss.org/",
+    "credibility_tier": 2,
+    "notes": "Health IT."
+  },
+  {
+    "id": "src_eb1a_019_odsc",
+    "registry_rank": 19,
+    "name": "Open Data Science Conference \u2014 Call for Speakers",
+    "organization": "ODSC",
+    "source_category": "Speaking",
+    "criteria_tags": [
+      "Original Contributions",
+      "Leading/Critical Role"
+    ],
+    "typical_fee": "Free",
+    "canonical_domain": "odsc.com",
+    "seed_url": "https://odsc.com/",
+    "credibility_tier": 2,
+    "notes": "Applied data science / AI."
+  },
+  {
+    "id": "src_eb1a_020_infoq_c4media",
+    "registry_rank": 20,
+    "name": "QCon \u2014 Call for Speakers",
+    "organization": "InfoQ / C4Media",
+    "source_category": "Speaking",
+    "criteria_tags": [
+      "Original Contributions",
+      "Leading/Critical Role"
+    ],
+    "typical_fee": "Free",
+    "canonical_domain": "qconferences.com",
+    "seed_url": "https://qconferences.com/",
+    "credibility_tier": 2,
+    "notes": "Senior software practitioners. Confirm current path."
+  },
+  {
+    "id": "src_eb1a_021_ted",
+    "registry_rank": 21,
+    "name": "Speaker Nomination",
+    "organization": "TED",
+    "source_category": "Speaking",
+    "criteria_tags": [
+      "Original Contributions",
+      "Leading/Critical Role"
+    ],
+    "typical_fee": "Free",
+    "canonical_domain": "ted.com",
+    "seed_url": "https://www.ted.com/participate/nominate",
+    "credibility_tier": 2,
+    "notes": "Main TED stage; highly selective. Self- or third-party nomination."
+  },
+  {
+    "id": "src_eb1a_022_ted",
+    "registry_rank": 22,
+    "name": "TEDx Program \u2014 local events",
+    "organization": "TED",
+    "source_category": "Speaking",
+    "criteria_tags": [
+      "Original Contributions",
+      "Leading/Critical Role"
+    ],
+    "typical_fee": "Free",
+    "canonical_domain": "ted.com",
+    "seed_url": "https://www.ted.com/about/programs-initiatives/tedx-program",
+    "credibility_tier": 2,
+    "notes": "Distributed: each local event runs its own CFP."
+  },
+  {
+    "id": "src_eb1a_023_ieee",
+    "registry_rank": 23,
+    "name": "Awards",
+    "organization": "IEEE",
+    "source_category": "Awards & Nominations",
+    "criteria_tags": [
+      "Awards"
+    ],
+    "typical_fee": "Free",
+    "canonical_domain": "ieee.org",
+    "seed_url": "https://www.ieee.org/about/awards/",
+    "credibility_tier": 1,
+    "notes": "Technical-field and society awards."
+  },
+  {
+    "id": "src_eb1a_024_acm",
+    "registry_rank": 24,
+    "name": "Awards",
+    "organization": "ACM",
+    "source_category": "Awards & Nominations",
+    "criteria_tags": [
+      "Awards"
+    ],
+    "typical_fee": "Free",
+    "canonical_domain": "awards.acm.org",
+    "seed_url": "https://awards.acm.org/",
+    "credibility_tier": 1,
+    "notes": "Includes major ACM honors."
+  },
+  {
+    "id": "src_eb1a_025_aaas",
+    "registry_rank": 25,
+    "name": "Awards & Prizes",
+    "organization": "AAAS",
+    "source_category": "Awards & Nominations",
+    "criteria_tags": [
+      "Awards"
+    ],
+    "typical_fee": "Free",
+    "canonical_domain": "aaas.org",
+    "seed_url": "https://www.aaas.org/awards",
+    "credibility_tier": 1,
+    "notes": "Confirm current awards path."
+  },
+  {
+    "id": "src_eb1a_026_mit_technology_review",
+    "registry_rank": 26,
+    "name": "Innovators Under 35",
+    "organization": "MIT Technology Review",
+    "source_category": "Awards & Nominations",
+    "criteria_tags": [
+      "Awards"
+    ],
+    "typical_fee": "Free",
+    "canonical_domain": "technologyreview.com",
+    "seed_url": "https://www.technologyreview.com/innovators-under-35/",
+    "credibility_tier": 1,
+    "notes": "Age-limited (35 or under)."
+  },
+  {
+    "id": "src_eb1a_027_forbes",
+    "registry_rank": 27,
+    "name": "30 Under 30 \u2014 Nominations",
+    "organization": "Forbes",
+    "source_category": "Awards & Nominations",
+    "criteria_tags": [
+      "Awards"
+    ],
+    "typical_fee": "Free",
+    "canonical_domain": "forbes.com",
+    "seed_url": "https://www.forbes.com/30-under-30/",
+    "credibility_tier": 2,
+    "notes": "Age-limited; recognized recognition list."
+  },
+  {
+    "id": "src_eb1a_028_core77",
+    "registry_rank": 28,
+    "name": "Design Awards",
+    "organization": "Core77",
+    "source_category": "Awards & Nominations",
+    "criteria_tags": [
+      "Awards",
+      "Exhibitions/Showcases"
+    ],
+    "typical_fee": "Paid entry",
+    "canonical_domain": "designawards.core77.com",
+    "seed_url": "https://designawards.core77.com/",
+    "credibility_tier": 2,
+    "notes": "Design fields; juried; submission fee applies."
+  },
+  {
+    "id": "src_eb1a_029_ieee",
+    "registry_rank": 29,
+    "name": "Senior Member",
+    "organization": "IEEE",
+    "source_category": "Memberships & Fellowships",
+    "criteria_tags": [
+      "Memberships"
+    ],
+    "typical_fee": "Membership dues",
+    "canonical_domain": "ieee.org",
+    "seed_url": "https://www.ieee.org/membership/senior/",
+    "credibility_tier": 1,
+    "notes": "Self-nominate; experience + 3 references."
+  },
+  {
+    "id": "src_eb1a_030_ieee",
+    "registry_rank": 30,
+    "name": "Fellow",
+    "organization": "IEEE",
+    "source_category": "Memberships & Fellowships",
+    "criteria_tags": [
+      "Memberships"
+    ],
+    "typical_fee": "Membership dues",
+    "canonical_domain": "ieee.org",
+    "seed_url": "https://www.ieee.org/membership/fellows/index.html",
+    "credibility_tier": 1,
+    "notes": "Must hold Senior Member; nomination. Confirm path."
+  },
+  {
+    "id": "src_eb1a_031_acm",
+    "registry_rank": 31,
+    "name": "Senior Member",
+    "organization": "ACM",
+    "source_category": "Memberships & Fellowships",
+    "criteria_tags": [
+      "Memberships"
+    ],
+    "typical_fee": "Membership dues",
+    "canonical_domain": "acm.org",
+    "seed_url": "https://www.acm.org/membership/senior-members",
+    "credibility_tier": 1,
+    "notes": "10 yrs experience + 5 yrs professional membership."
+  },
+  {
+    "id": "src_eb1a_032_acm",
+    "registry_rank": 32,
+    "name": "Distinguished Member / Fellow",
+    "organization": "ACM",
+    "source_category": "Memberships & Fellowships",
+    "criteria_tags": [
+      "Memberships"
+    ],
+    "typical_fee": "Membership dues",
+    "canonical_domain": "awards.acm.org",
+    "seed_url": "https://awards.acm.org/",
+    "credibility_tier": 1,
+    "notes": "Recognition grades by nomination."
+  },
+  {
+    "id": "src_eb1a_033_aaas",
+    "registry_rank": 33,
+    "name": "Fellow",
+    "organization": "AAAS",
+    "source_category": "Memberships & Fellowships",
+    "criteria_tags": [
+      "Memberships"
+    ],
+    "typical_fee": "Membership + dues",
+    "canonical_domain": "aaas.org",
+    "seed_url": "https://www.aaas.org/fellows",
+    "credibility_tier": 1,
+    "notes": "4 yrs continuous membership; nominated by 3 existing Fellows."
+  },
+  {
+    "id": "src_eb1a_034_national_academy_of_inventors",
+    "registry_rank": 34,
+    "name": "Senior Member Program",
+    "organization": "National Academy of Inventors",
+    "source_category": "Memberships & Fellowships",
+    "criteria_tags": [
+      "Memberships"
+    ],
+    "typical_fee": "\u2014",
+    "canonical_domain": "academyofinventors.org",
+    "seed_url": "https://academyofinventors.org/about-the-senior-members-program/",
+    "credibility_tier": 1,
+    "notes": "Requires patents + affiliation with an NAI member institution."
+  },
+  {
+    "id": "src_eb1a_035_sigma_xi",
+    "registry_rank": 35,
+    "name": "Membership (by nomination)",
+    "organization": "Sigma Xi",
+    "source_category": "Memberships & Fellowships",
+    "criteria_tags": [
+      "Memberships"
+    ],
+    "typical_fee": "Membership dues",
+    "canonical_domain": "sigmaxi.org",
+    "seed_url": "https://www.sigmaxi.org/",
+    "credibility_tier": 2,
+    "notes": "Research honor society; nomination-based."
+  },
+  {
+    "id": "src_eb1a_036_royal_society_of_medicine",
+    "registry_rank": 36,
+    "name": "Fellowship",
+    "organization": "Royal Society of Medicine",
+    "source_category": "Memberships & Fellowships",
+    "criteria_tags": [
+      "Memberships"
+    ],
+    "typical_fee": "Membership dues",
+    "canonical_domain": "rsm.ac.uk",
+    "seed_url": "https://www.rsm.ac.uk/",
+    "credibility_tier": 2,
+    "notes": "UK; medical & health professions."
+  },
+  {
+    "id": "src_eb1a_037_bcs_chartered_institute_for_it",
+    "registry_rank": 37,
+    "name": "Fellow / Member",
+    "organization": "BCS \u2014 Chartered Institute for IT",
+    "source_category": "Memberships & Fellowships",
+    "criteria_tags": [
+      "Memberships"
+    ],
+    "typical_fee": "Membership dues",
+    "canonical_domain": "bcs.org",
+    "seed_url": "https://www.bcs.org/",
+    "credibility_tier": 2,
+    "notes": "UK chartered professional IT body."
+  },
+  {
+    "id": "src_eb1a_038_frontiers",
+    "registry_rank": 38,
+    "name": "Review Editor / Editorial Board",
+    "organization": "Frontiers",
+    "source_category": "Editorial / Board / Leadership",
+    "criteria_tags": [
+      "Leading/Critical Role",
+      "Judging"
+    ],
+    "typical_fee": "Free",
+    "canonical_domain": "frontiersin.org",
+    "seed_url": "https://www.frontiersin.org/",
+    "credibility_tier": 2,
+    "notes": "Apply to join review / editorial boards."
+  },
+  {
+    "id": "src_eb1a_039_springer_nature",
+    "registry_rank": 39,
+    "name": "Editorial Board recruitment",
+    "organization": "Springer Nature",
+    "source_category": "Editorial / Board / Leadership",
+    "criteria_tags": [
+      "Leading/Critical Role"
+    ],
+    "typical_fee": "Free",
+    "canonical_domain": "springernature.com",
+    "seed_url": "https://www.springernature.com/",
+    "credibility_tier": 2,
+    "notes": "Periodic board calls. Confirm path."
+  },
+  {
+    "id": "src_eb1a_040_ietf",
+    "registry_rank": 40,
+    "name": "Working Groups \u2014 participation & leadership",
+    "organization": "IETF",
+    "source_category": "Editorial / Board / Leadership",
+    "criteria_tags": [
+      "Leading/Critical Role",
+      "Original Contributions"
+    ],
+    "typical_fee": "Free",
+    "canonical_domain": "ietf.org",
+    "seed_url": "https://www.ietf.org/",
+    "credibility_tier": 1,
+    "notes": "Internet standards; open participation, leadership via WG roles."
+  },
+  {
+    "id": "src_eb1a_041_w3c",
+    "registry_rank": 41,
+    "name": "Working & Community Groups",
+    "organization": "W3C",
+    "source_category": "Editorial / Board / Leadership",
+    "criteria_tags": [
+      "Leading/Critical Role",
+      "Original Contributions"
+    ],
+    "typical_fee": "Free (some need membership)",
+    "canonical_domain": "w3.org",
+    "seed_url": "https://www.w3.org/",
+    "credibility_tier": 1,
+    "notes": "Web standards participation / leadership."
+  },
+  {
+    "id": "src_eb1a_042_scientific_american",
+    "registry_rank": 42,
+    "name": "Submissions / Pitch",
+    "organization": "Scientific American",
+    "source_category": "Media & Interview",
+    "criteria_tags": [
+      "Published Material",
+      "Scholarly Articles"
+    ],
+    "typical_fee": "Free",
+    "canonical_domain": "scientificamerican.com",
+    "seed_url": "https://www.scientificamerican.com/",
+    "credibility_tier": 2,
+    "notes": "Feature / opinion pitches. Confirm submissions page."
+  },
+  {
+    "id": "src_eb1a_043_stat_news",
+    "registry_rank": 43,
+    "name": "First Opinion",
+    "organization": "STAT News",
+    "source_category": "Media & Interview",
+    "criteria_tags": [
+      "Published Material"
+    ],
+    "typical_fee": "Free",
+    "canonical_domain": "statnews.com",
+    "seed_url": "https://www.statnews.com/category/first-opinion/",
+    "credibility_tier": 2,
+    "notes": "Health & medicine commentary (healthcare clients)."
+  },
+  {
+    "id": "src_eb1a_044_acm_siggraph",
+    "registry_rank": 44,
+    "name": "ACM SIGGRAPH \u2014 Submissions (Art Gallery, Emerging Tech, Posters)",
+    "organization": "ACM SIGGRAPH",
+    "source_category": "Exhibitions & Showcases",
+    "criteria_tags": [
+      "Exhibitions/Showcases",
+      "Original Contributions"
+    ],
+    "typical_fee": "Varies",
+    "canonical_domain": "siggraph.org",
+    "seed_url": "https://www.siggraph.org/",
+    "credibility_tier": 1,
+    "notes": "Computer graphics / interactive techniques."
+  },
+  {
+    "id": "src_eb1a_045_ixda",
+    "registry_rank": 45,
+    "name": "Interaction Awards & Conference",
+    "organization": "IxDA",
+    "source_category": "Exhibitions & Showcases",
+    "criteria_tags": [
+      "Exhibitions/Showcases",
+      "Original Contributions"
+    ],
+    "typical_fee": "Varies",
+    "canonical_domain": "ixda.org",
+    "seed_url": "https://ixda.org/",
+    "credibility_tier": 2,
+    "notes": "Interaction-design showcase + talks."
+  }
+]
