@@ -1,29 +1,82 @@
-const livePortals = [
-  {
-    name: "setu finance",
-    href: "/finance",
-    summary: "Finance operations, contract intake, billing, receipts, payables, people, audit, and AskSetu.",
-  },
-  {
-    name: "setu referral",
-    href: "/referral",
-    summary: "Public referral intake, referrer lookup, review workflow, rewards, and finance approval.",
-  },
-  {
-    name: "setu discovery",
-    href: "/discover",
-    summary: "Opportunity inventory, source refresh, client matching, review queue, and outreach logs.",
-  },
-];
+import Link from "next/link";
+import {
+  ArrowRight,
+  Compass,
+  Megaphone,
+  Share2,
+  TrendingUp,
+  UserRound,
+} from "lucide-react";
 
-const plannedPortals = [
-  "setu customer",
-  "setu media",
+const portals = [
+  {
+    id: "finance",
+    eyebrow: "setu",
+    name: "Finance",
+    href: "/finance",
+    status: "Live",
+    accent: "#5F7A6B",
+    tint: "#E7EDE8",
+    Icon: TrendingUp,
+    summary: "Billing, contracts, receivables, payables, people, audit, and AskSetu operations.",
+  },
+  {
+    id: "discover",
+    eyebrow: "setu",
+    name: "Discover",
+    href: "/discover",
+    status: "Live",
+    accent: "#C68A3E",
+    tint: "#F3E7D8",
+    Icon: Compass,
+    summary: "Opportunity inventory, source refresh, matching, review queues, and outreach logs.",
+  },
+  {
+    id: "customer",
+    eyebrow: "setu",
+    name: "Customer",
+    href: "",
+    status: "Planned",
+    accent: "#6E89A6",
+    tint: "#E6ECF2",
+    Icon: UserRound,
+    summary: "Client profiles, evidence intake, service progress, and controlled client views.",
+  },
+  {
+    id: "media",
+    eyebrow: "setu",
+    name: "Media",
+    href: "",
+    status: "Planned",
+    accent: "#A35E72",
+    tint: "#EFE3E7",
+    Icon: Megaphone,
+    summary: "Press assets, public proof, publications, and external validation workflows.",
+  },
+  {
+    id: "referral",
+    eyebrow: "setu",
+    name: "Referral",
+    href: "/referral",
+    status: "Live",
+    accent: "#8A9A5B",
+    tint: "#ECF0E2",
+    Icon: Share2,
+    summary: "Public referral intake, referrer lookup, reward qualification, and approval flow.",
+  },
 ];
 
 export default function SystemsLandingPage() {
   return (
     <main className="systems-landing">
+      <section className="systems-goal" aria-label="Setu Systems goal">
+        <span>Goal</span>
+        <p>
+          Setu Systems exists to run every Setu operating portal from one production-ready hub:
+          unified identity, shared data discipline, and focused workflows for each team.
+        </p>
+      </section>
+
       <section className="systems-hero">
         <div className="systems-wordmark" aria-label="setu systems">
           <span className="systems-logo-text">setu</span>
@@ -32,38 +85,63 @@ export default function SystemsLandingPage() {
         </div>
         <div className="systems-hero-copy">
           <p className="systems-kicker">Unified production workspace</p>
-          <h1>Setu Systems</h1>
+          <h1>One Setu system. Purpose-built portals.</h1>
           <p>
-            One deployable product family for finance operations, referrals, and discovery workflows,
-            backed by a shared operational data layer and portal-specific access paths.
+            A single deployable product family for finance, referral, and discovery operations,
+            designed to grow into customer and media portals without fragmenting the stack.
           </p>
         </div>
       </section>
 
-      <section className="systems-panel" aria-label="Live portals">
+      <section className="systems-panel" aria-label="Setu portals">
         <div className="systems-section-head">
-          <h2>Live portals</h2>
-          <p>Each portal keeps its own function while sharing the same Setu identity.</p>
+          <div className="systems-section-title">
+            <span>04</span>
+            <h2>The five portals</h2>
+          </div>
+          <p>
+            One family: shared wordmark, shared operating model, and clear portal distinction by
+            function, icon, and accent.
+          </p>
         </div>
         <div className="systems-portal-grid">
-          {livePortals.map((portal) => (
-            <a className="systems-portal-card" href={portal.href} key={portal.name}>
-              <span>{portal.name}</span>
-              <p>{portal.summary}</p>
-            </a>
-          ))}
-        </div>
-      </section>
+          {portals.map((portal) => {
+            const Icon = portal.Icon;
+            const cardContent = (
+              <>
+                <span className="systems-card-icon" style={{ backgroundColor: portal.tint, color: portal.accent }}>
+                  <Icon size={22} />
+                </span>
+                <span className="systems-card-eyebrow">{portal.eyebrow}</span>
+                <h3>{portal.name}</h3>
+                <p>{portal.summary}</p>
+                <span className={`systems-card-cta ${portal.status === "Live" ? "is-live" : ""}`}>
+                  {portal.status === "Live" ? "Open portal" : "Planned"}
+                  {portal.status === "Live" ? <ArrowRight size={15} /> : null}
+                </span>
+              </>
+            );
 
-      <section className="systems-panel systems-panel-muted" aria-label="Planned portals">
-        <div className="systems-section-head">
-          <h2>Planned portals</h2>
-          <p>These product areas are reserved in the system architecture and documentation.</p>
-        </div>
-        <div className="systems-planned-list">
-          {plannedPortals.map((portal) => (
-            <span key={portal}>{portal}</span>
-          ))}
+            return portal.href ? (
+              <Link
+                className="systems-portal-card"
+                href={portal.href}
+                key={portal.id}
+                style={{ borderTopColor: portal.accent }}
+              >
+                {cardContent}
+              </Link>
+            ) : (
+              <article
+                aria-label={`${portal.name} planned portal`}
+                className="systems-portal-card is-planned"
+                key={portal.id}
+                style={{ borderTopColor: portal.accent }}
+              >
+                {cardContent}
+              </article>
+            );
+          })}
         </div>
       </section>
     </main>
