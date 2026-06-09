@@ -1,0 +1,25 @@
+diff --git a/server/stateStore.js b/server/stateStore.js
+index abcdef1..1234567 100644
+--- a/server/stateStore.js
++++ b/server/stateStore.js
+@@ -1,4 +1,5 @@
+ // At the top of the file, add the import:
++const { validateDiscountPct, ValidationError } = require('./validation/invoiceValidation');
+ 
+ // ... (existing code) ...
+ 
+@@ -5970,7 +5971,14 @@ async function createInvoiceRecord(form, sendNow, userId) {
+   // ... (existing code) ...
+ 
+-  const discountPct = Number(form.discountPct || 0);
++  const discountPctResult = validateDiscountPct(form.discountPct);
++  if (!discountPctResult.valid) {
++    const err = new Error(discountPctResult.error);
++    err.statusCode = 400;
++    throw err;
++  }
++  const discountPct = discountPctResult.value;
++
+   const amounts = calculateInvoiceAmounts(amount, discountPct, 0);
+ 
+   // ... rest of function unchanged ...

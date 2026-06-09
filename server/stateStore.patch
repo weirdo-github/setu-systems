@@ -1,0 +1,32 @@
+--- a/server/stateStore.js
++++ b/server/stateStore.js
+@@ -1,4 +1,5 @@
+ // At the top of the file, add the import:
++const { validateDiscountPct, ValidationError } = require('./validation/invoiceValidation');
+ 
+ // Around line 5973, in createInvoiceRecord function, replace:
+ //   const discountPct = Number(form.discountPct || 0);
+@@ -6,7 +7,14 @@
+ // With the following validated version:
+ 
+-  const discountPct = Number(form.discountPct || 0);
++  const discountPctResult = validateDiscountPct(form.discountPct);
++  if (!discountPctResult.valid) {
++    const error = new Error(discountPctResult.error);
++    error.statusCode = 400;
++    throw error;
++  }
++  const discountPct = discountPctResult.value;
+ 
+ // In the route handler for POST /api/invoices, ensure the thrown error
+ // is caught and returned as a 400 response. If there is a generic
+ // error handler, it should check for error.statusCode:
+@@ -14,6 +22,10 @@
+ // Example route-level catch (adjust to your actual route pattern):
+ //
++//  } catch (err) {
++//    if (err.statusCode === 400) {
++//      return res.status(400).json({ error: err.message });
++//    }
++//    throw err;
++//  }

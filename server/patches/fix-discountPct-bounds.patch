@@ -1,0 +1,40 @@
+diff --git a/server/stateStore.js b/server/stateStore.js
+index abcdef1..1234567 100644
+--- a/server/stateStore.js
++++ b/server/stateStore.js
+@@ -1,4 +1,5 @@
+ // Near top of file, add import:
++const { validateDiscountPct } = require('./validation/invoiceValidation');
+ 
+ // ... (existing code) ...
+ 
+@@ -5970,7 +5971,14 @@ async function createInvoiceRecord(form, userId) {
+   // ~line 5973: replace raw Number cast with validated version
+-  const discountPct = Number(form.discountPct || 0);
++  const discountValidation = validateDiscountPct(form.discountPct);
++  if (!discountValidation.valid) {
++    const err = new Error(discountValidation.error);
++    err.statusCode = 400;
++    throw err;
++  }
++  const discountPct = discountValidation.value;
+ 
+   // rest of function continues unchanged...
+   const amounts = calculateInvoiceAmounts(amount, discountPct, 0);
+
+--- 
+--- Also patch the API route handler to catch validation errors:
+--- (likely in server/stateStore.js or a routes file)
+---
+@@ (in the POST /api/invoices handler)
+   try {
+     const result = await createInvoiceRecord(form, userId);
+     res.json(result);
+   } catch (err) {
+-    console.error(err);
+-    res.status(500).json({ error: 'Internal server error' });
++    const status = err.statusCode || 500;
++    const message = status === 400 ? err.message : 'Internal server error';
++    if (status === 500) console.error(err);
++    res.status(status).json({ error: message });
+   }
